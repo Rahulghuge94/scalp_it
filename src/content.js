@@ -6,7 +6,7 @@ document.body.appendChild(tailwind_css)`
 //document.write("<script src='tailwindcss.js'></script>")
 
 let scalp_it_html = `<div class='flex flex-col absolute h-96 w-72 bg-gray-100 rounded-md shadow-md shadow-slate-400 top-10 right-10 text-black z-50' id="scalp_it">
-<div class='flex h-10 w-72 bg-gray-800 rounded-sm shadow-md shadow-stone-500 place-items-center text-slate-100 items-center'><h1 class="px-10 text-white">SCALP-IT</h1></div>
+<div class='flex h-10 w-72 bg-gray-800 rounded-sm shadow-md shadow-stone-500 place-items-center text-slate-100 items-center' id="nav-scalp"><h1 class="px-10 text-white">SCALP-IT</h1></div>
 <div class='grid grid-cols-2 h-5/6 w-72 bg-gray-100 justify-items-center my-1'>
     <label class='block justify-center text-xs h-7 w-28'>SYMBOL</label>
     <input class='text-center h-7 w-28 text-xs rounded-md border border-gray-700' id='_symbol' list='symbols' value='BANKNIFTY'>
@@ -141,7 +141,6 @@ function place_buy(){
 
 function place_sell(){
     let _price = Price.value;
-
     let qty = Symbol.value == "BANKNIFTY" ? Qty.value * 25: Qty.value * 50;
     let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
     let ordtp = Ordtype.value;
@@ -185,6 +184,51 @@ function onkeyStrikePrice(event){
         Strike.value = s_val - mult;
     }
 }
+
+var SCALP_IT_ELE = document.getElementById("scalp_it");
+
+/* example copied from w3school*/
+function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById("nav-scalp")) {
+      // if present, the header is where you move the DIV from:
+      document.getElementById("nav-scalp").onmousedown = dragMouseDown;
+    } else {
+      // otherwise, move the DIV from anywhere inside the DIV:
+      elmnt.onmousedown = dragMouseDown;
+    }
+  
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+  
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+  
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+  dragElement(SCALP_IT_ELE)
 
 Strike.onkeyup = onkeyStrikePrice
 
