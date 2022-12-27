@@ -1,1 +1,17 @@
+#SCALP-IT
+Chrome extension to place order in finvasia.
 
+Note:-  1) check the source code before loading the extension. 
+
+	2) add "EXP" key in browser local storage of trade.shoonya.com so you can get expiry dates loaded in following format.
+	   ["29DEC22", "05JAN23", "12JAN23", "19JAN23", "25JAN23", "02FEB23", "09FEB23", "16FEB23", "25FEB23"]
+
+	3) for your own security purpose create tailwindcss.js file from https://cdn.tailwindcss.com and put it in same folder.
+
+	4) Strike prices can be changed by pressing up and down key in input box. make sure u enter a initial value in input box.
+
+	5) additionally you can add more keypress events for scalping.
+
+/*how to load the extension*/
+
+goto Chrome => settings=> Extensions => developer mode (top right corner) => load unpack => select the folder where you downloaded the extension.

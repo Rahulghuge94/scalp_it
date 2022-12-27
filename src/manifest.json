@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "SCALP-IT",
+    "version": "1.0",
+    "description": "Launch a new tab with top posts from any subreddit.",
+    "content_scripts": [
+                            {
+                            "js": ["/tailwindcss.js","/content.js"],
+			    "run_at": "document_idle",
+                            "matches": [
+                                "https://shoonya.finvasia.com/*",
+                                "https://trade.shoonya.com//*"
+                            ]
+                            }
+                        ]
+}
