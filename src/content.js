@@ -64,8 +64,7 @@ var Qty = document.getElementById("_qty");
 var Strike = document.getElementById("_strike");
 var Callput = document.getElementById("_callput");
 
-var bnfStrikeMult = 100;
-var nfStrikeMult = 50;
+const LOT_SIZES = {"BANKNIFTY": 25, "NIFTY": 25, "CRUDEOIL": 100}
 
 if (localStorage.getItem("EXP")){
     let EXP = JSON.parse(localStorage.getItem("EXP"));
@@ -130,7 +129,11 @@ async function placeOrder(price, qty, tradingsymbol, ord_tp, sl = 0, buysell = "
 
 function place_buy(){
     let _price = Price.value;
-    let qty = Symbol.value == "BANKNIFTY" ? Qty.value * 25: Qty.value * 50;
+    //let qty = Symbol.value == "BANKNIFTY" ? Qty.value * 25: Qty.value * 50;
+    let qty = Qty.value
+    if (Exchange.value != "NSE"){
+        qty = Qty.value * LOT_SIZES[Symbol.value];
+    }
     let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
     let ordtp = Ordtype.value;
     let exc = Exchange.value;
@@ -186,6 +189,10 @@ function onkeyStrikePrice(event){
 }
 
 var SCALP_IT_ELE = document.getElementById("scalp_it");
+var SCALP_IT_ELE_NAV = document.getElementById("nav-scalp");
+
+/* example copied from w3school*/
+var SCALP_IT_ELE = document.getElementById("scalp_it");
 
 /* example copied from w3school*/
 function dragElement(elmnt) {
@@ -228,8 +235,8 @@ function dragElement(elmnt) {
       document.onmousemove = null;
     }
   }
-  dragElement(SCALP_IT_ELE)
-
+  
+dragElement(SCALP_IT_ELE);
 Strike.onkeyup = onkeyStrikePrice
 
 document.getElementById("BUY").onclick = place_buy
