@@ -38,7 +38,7 @@ let scalp_it_html = `<div class='flex flex-col absolute h-96 w-72 bg-gray-100 ro
     <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_strike' list='strike'>
     <datalist class='allStrikes' id='strike'></datalist>
     <label class='text-xs h-7 w-28'>CALL/PUT</label>
-    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_callput' list='callput' value='C'>
+    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_callput' list='callput' value='P'>
     <datalist id='callput'><option value='C'><option value='P'></datalist>
     <button class='h-6 w-16 rounded-lg bg-green-700' id="BUY">BUY</button>
     <button class='h-6 w-16 rounded-lg bg-red-500' id="SELL">SELL</button>
@@ -136,7 +136,7 @@ function place_buy(){
     if (Exchange.value != "NSE"){
         qty = Qty.value * LOT_SIZES[Symbol.value];
     }
-    let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
+    let tradingsymbol = Symbol.value + Expiry.value + Callput.value..toUpperCase() + Strike.value;
     let ordtp = Ordtype.value;
     let exc = Exchange.value;
     let prdct = Product.value;
@@ -147,7 +147,7 @@ function place_buy(){
 function place_sell(){
     let _price = Price.value;
     let qty = Symbol.value == "BANKNIFTY" ? Qty.value * 25: Qty.value * 50;
-    let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
+    let tradingsymbol = Symbol.value + Expiry.value + Callput.value.toUpperCase() + Strike.value;
     let ordtp = Ordtype.value;
     let exc = Exchange.value;
     let prdct = Product.value;
