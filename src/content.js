@@ -53,6 +53,8 @@ let DOM = parser.parseFromString(scalp_it_html, content);
 document.body.appendChild(DOM.body.childNodes[0]);
 document.body.getElementsByTagName("flt-glass-pane").style = "-1"
 
+//MONTHS.
+var _MONTHS_ = {0: "JAN", 1: "FEB", 2: "MAR", 3: "APR", 4: "MAY", 5: "JUN", 6: "JUL", 7: "AUG", 8: "SEP", 9: "OCT", 10: "NOV", 11: "DEC"}
 
 var Symbol = document.getElementById("_symbol");
 var Exchange = document.getElementById("_exchange");
