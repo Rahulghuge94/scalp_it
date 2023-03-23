@@ -28,7 +28,7 @@ let scalp_it_html = `<div class='flex flex-col absolute h-96 w-72 bg-gray-100 ro
     <datalist id='product'><option value='M'><option value='I'><option value='C'></datalist>
     
     <label class='text-xs h-7 w-28'>EXPIRY</label>
-    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_expiry' list='expiry'>
+    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  autocomplete='off' id='_expiry' list='expiry'>
     <datalist id='expiry'></datalist>
         
     <label class='text-xs h-7 w-28'>QTY</label>
@@ -38,7 +38,7 @@ let scalp_it_html = `<div class='flex flex-col absolute h-96 w-72 bg-gray-100 ro
     <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_strike' list='strike'>
     <datalist class='allStrikes' id='strike'></datalist>
     <label class='text-xs h-7 w-28'>CALL/PUT</label>
-    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_callput' list='callput' value='P'>
+    <input  class='text-center h-7 w-28 text-xs rounded-md border border-gray-700'  id='_callput' list='callput' value='C'>
     <datalist id='callput'><option value='C'><option value='P'></datalist>
     <button class='h-6 w-16 rounded-lg bg-green-700' id="BUY">BUY</button>
     <button class='h-6 w-16 rounded-lg bg-red-500' id="SELL">SELL</button>
@@ -53,8 +53,6 @@ let DOM = parser.parseFromString(scalp_it_html, content);
 document.body.appendChild(DOM.body.childNodes[0]);
 document.body.getElementsByTagName("flt-glass-pane").style = "-1"
 
-//MONTHS.
-var _MONTHS_ = {0: "JAN", 1: "FEB", 2: "MAR", 3: "APR", 4: "MAY", 5: "JUN", 6: "JUL", 7: "AUG", 8: "SEP", 9: "OCT", 10: "NOV", 11: "DEC"}
 
 var Symbol = document.getElementById("_symbol");
 var Exchange = document.getElementById("_exchange");
@@ -67,15 +65,56 @@ var Strike = document.getElementById("_strike");
 var Callput = document.getElementById("_callput");
 
 const LOT_SIZES = {"BANKNIFTY": 25, "NIFTY": 25, "CRUDEOIL": 100}
+const _SYMBOLS = [];
+const expiries = ["16-MAR-2023", "23-MAR-2023", "29-MAR-2023", "06-APR-2023", 
+                "13-APR-2023", "20-APR-2023", "27-APR-2023", "04-MAY-2023", "11-MAY-2023", 
+                "18-MAY-2023", "25-MAY-2023", "01-JUN-2023", "08-JUN-2023", 
+                "15-JUN-2023", "22-JUN-2023", "29-JUN-2023", "06-JUL-2023", 
+                "13-JUL-2023", "20-JUL-2023", "27-JUL-2023","03-AUG-2023", 
+                "10-AUG-2023", "17-AUG-2023", "24-AUG-2023", "31-AUG-2023", 
+                "07-SEP-2023", "14-SEP-2023", "21-SEP-2023", "28-SEP-2023", 
+                "05-OCT-2023", "12-OCT-2023", "19-OCT-2023", "26-OCT-2023",
+                "02-NOV-2023", "09-NOV-2023", "16-NOV-2023", "23-NOV-2023", 
+                "30-NOV-2023", "07-DEC-2023", "14-DEC-2023", "21-DEC-2023",
+                "28-DEC-2023"];
 
-if (localStorage.getItem("EXP")){
-    let EXP = JSON.parse(localStorage.getItem("EXP"));
-    let e_list = document.getElementById("expiry");
-    for (i=0; i < EXP.length; i++){
-        let o = document.createElement("option");
-        o.value = EXP[i];
-        e_list.appendChild(o);
+function is_old_exp(_date_){
+    let tDate = new Date(_date_);
+    //let cDate = new Date();
+    if (tDate < cDate){
+        return true;
     }
+    else{
+        return false
+    }
+}
+                
+function _getDate(){
+    let _date_ = new Date();
+    let tDay = _date_.getDate();
+    let tMonth = _date_.getMonth();
+    let tYear = _date_.getFullYear();
+    window.cDate = new Date(tYear, tMonth, tDay);
+}
+_getDate();//generate Current date.
+function formatDate(_date_){
+    let sDate = _date_.slice(0, 2) + _date_.slice(3, 6) + _date_.slice(9, 11);
+    return sDate
+}
+
+//if (localStorage.getItem("EXP")){
+if (expiries){
+    //let EXP = JSON.parse(localStorage.getItem("EXP"));
+    let e_list = document.getElementById("expiry");
+    for (i=0; i < expiries.length; i++){
+        if (is_old_exp(expiries[i]) == false){
+            let o = document.createElement("option");
+            let EXP = expiries[i]
+            o.value = formatDate(EXP);
+            e_list.appendChild(o);
+        }
+    }
+    Expiry.value = e_list.firstChild.value;
 }
 
 function genrateStrike(price){
@@ -87,6 +126,25 @@ function genrateStrike(price){
     let s_list = document.getElementById("strike");
 
     let start = ((price / mult) * mult) - (mult * 40);
+    for (i=0; i < 80; i++){
+        let o = document.createElement("option");
+        o.value = String(start);
+        s_list.appendChild(o);
+        start += mult;
+    }
+}
+
+function genrateStrike(price){
+    let mult = 50;
+
+    if (Symbol.value == "BANKNIFTY"){
+        mult = 100;
+    }
+
+    let strikes = "";
+    let s_list = document.getElementById("strike");
+    let start = ((price / mult) * mult) - (mult * 40);
+
     for (i=0; i < 80; i++){
         let o = document.createElement("option");
         o.value = String(start);
@@ -136,7 +194,7 @@ function place_buy(){
     if (Exchange.value != "NSE"){
         qty = Qty.value * LOT_SIZES[Symbol.value];
     }
-    let tradingsymbol = Symbol.value + Expiry.value + Callput.value..toUpperCase() + Strike.value;
+    let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
     let ordtp = Ordtype.value;
     let exc = Exchange.value;
     let prdct = Product.value;
@@ -147,7 +205,7 @@ function place_buy(){
 function place_sell(){
     let _price = Price.value;
     let qty = Symbol.value == "BANKNIFTY" ? Qty.value * 25: Qty.value * 50;
-    let tradingsymbol = Symbol.value + Expiry.value + Callput.value.toUpperCase() + Strike.value;
+    let tradingsymbol = Symbol.value + Expiry.value + Callput.value + Strike.value;
     let ordtp = Ordtype.value;
     let exc = Exchange.value;
     let prdct = Product.value;
@@ -246,6 +304,30 @@ document.getElementById("SELL").onclick = place_sell
 
 //document.addEventListener("keypress", genStrikeFromInputPrice);
 
+//change the option type C/P.
+document.addEventListener('keydown', function (event) {
+    if (event.altKey && event.code.toLowerCase() == "keyc") {
+        if (Callput.value == "P"){
+            Callput.value = "C";
+        }else{
+            Callput.value = "P";
+        }
+    }
+});
+
+//hide/show element..
+document.addEventListener('keydown', function (event) {
+    if (event.ctrltKey && event.shiftKey && event.code.toLowerCase() == "keyh") {
+        if (scalp_it.style.display == ""){
+            scalp_it.style.display = "none";
+        }else{
+            scalp_it.style.display = "";
+        }
+    }
+});
+
+//change strike price globally by up and down key..
+document.addEventListener('keydown', onkeyStrikePrice);
 /*
 async function getIndexLTP(){
     let req = await fetch('https://trade.shoonya.com//NorenWClient/GetQuotes', {
