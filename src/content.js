@@ -317,7 +317,7 @@ document.addEventListener('keydown', function (event) {
 
 //hide/show element..
 document.addEventListener('keydown', function (event) {
-    if (event.ctrltKey && event.shiftKey && event.code.toLowerCase() == "keyh") {
+    if (event.ctrlKey && event.shiftKey && event.code.toLowerCase() == "keyh") {
         if (scalp_it.style.display == ""){
             scalp_it.style.display = "none";
         }else{
