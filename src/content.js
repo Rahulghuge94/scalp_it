@@ -297,7 +297,7 @@ function dragElement(elmnt) {
   }
   
 dragElement(SCALP_IT_ELE);
-Strike.onkeyup = onkeyStrikePrice
+//Strike.onkeyup = onkeyStrikePrice
 
 document.getElementById("BUY").onclick = place_buy
 document.getElementById("SELL").onclick = place_sell
